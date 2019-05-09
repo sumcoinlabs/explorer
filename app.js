@@ -106,6 +106,7 @@ app.use('/ext/connections', function(req,res){
   });
 });
 
+
 // locals
 app.set('title', settings.title);
 app.set('symbol', settings.symbol);
