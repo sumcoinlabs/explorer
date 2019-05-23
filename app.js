@@ -105,6 +105,25 @@ app.use('/ext/connections', function(req,res){
     res.send({data: peers});
   });
 });
+//sumcoin price 
+app.use('/ext/sumcoinprice', function(req, res) {
+  // Handle the get for this route
+  var price = '';
+  request('https://sumcoinindex.com/rates/price2.json', { json: true }, (err, response, body) => {
+    if (err) {
+  return console.log(err); 
+    }
+    console.log(body);
+    price = body.exch_rate_buy
+    console.log('price: ' + price);
+    res.send(price);
+       //console.log(body.explanation);
+  });
+  //price = body.exch_rate_buy
+  //console.log('price: ' + price);
+  //res.send(price);
+});
+
 
 
 // locals
