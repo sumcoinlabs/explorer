@@ -12,7 +12,23 @@ var express = require('express')
   , locale = require('./lib/locale')
   , request = require('request');
 
+// Add this section code to here
+var forceSSL = require('express-force-ssl');
+var https = require('https');
+var fs = require('fs');
+var ssl_options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/sumexplorer.com/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/sumexplorer.com/cert.pem'),
+  ca: fs.readFileSync('/etc/letsencrypt/live/sumexplorer.com/chain.pem')
+};
+
 var app = express();
+
+// Add this section code to here
+var secureServer = https.createServer(ssl_options, app);
+// Add this section code to here
+// Add below line here
+secureServer.listen(443);
 
 // bitcoinapi
 bitcoinapi.setWalletDetails(settings.wallet);
@@ -105,26 +121,29 @@ app.use('/ext/connections', function(req,res){
     res.send({data: peers});
   });
 });
+
+
+
 //sumcoin price 
 app.use('/ext/sumcoinprice', function(req, res) {
   // Handle the get for this route
   var price = '';
-  request('https://sumcoinindex.com/rates/price2.json', { json: true }, (err, response, body) => {
+  request('https://sumcoinindex.com/rates/price2.json', { json: true }, function (err, response, body) {
     if (err) {
-  return console.log(err); 
+  	return console.log('Error: ' + err); 
     }
     console.log(body);
-    price = body.exch_rate_buy
+    price = body.exch_rate_buy;
     console.log('price: ' + price);
     res.send(price);
-       //console.log(body.explanation);
+    console.log('Body: ' + body.explanation);
   });
-  //price = body.exch_rate_buy
-  //console.log('price: ' + price);
-  //res.send(price);
+    //price = body.exch_rate_buy
+   //console.log('price: ' + price);
+   //res.send(price);
 });
 
-
+//<!-- comment out until debug complete -->
 
 // locals
 app.set('title', settings.title);
