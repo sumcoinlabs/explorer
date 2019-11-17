@@ -5,6 +5,8 @@ var db = require('../lib/database');
 var app = require('../app');
 
 app.set('port', process.env.PORT || settings.port);
+debug('Express server listening on port ' + app.get('port'));
+
 
 var dbString = 'mongodb://' + settings.dbsettings.user;
 dbString = dbString + ':' + settings.dbsettings.password;

@@ -24,13 +24,11 @@ var ssl_options = {
 
 var app = express();
 
-app.listen(8080);
-
 // Add this section code to here
 var secureServer = https.createServer(ssl_options, app);
 // Add this section code to here
 // Add below line here
-//secureServer.listen(444);
+secureServer.listen(443);
 
 // bitcoinapi
 bitcoinapi.setWalletDetails(settings.wallet);
@@ -68,7 +66,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // routes
 app.use('/api', bitcoinapi.app);
-app.use('/', routes, require('redirect-https'));
+app.use('/', routes);
 app.use('/ext/getmoneysupply', function(req,res){
   lib.get_supply(function(supply){
     res.send(' '+supply);
